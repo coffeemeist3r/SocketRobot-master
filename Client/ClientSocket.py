@@ -2,7 +2,7 @@ import socket
 from pynput import keyboard
 
 server = socket.socket() 
-server.connect(("192.168.50.177", 6678)) 
+server.connect(("192.168.50.177", 6678))
 print("Successful connection to PiRobot socket")
 
 def on_key_release(key):

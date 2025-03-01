@@ -12,20 +12,20 @@ exit_program = 0
 
 def initialize():
     gpio.setmode(gpio.BOARD)
-    #gpio.setup(11, gpio.OUT)
-    #gpio.setup(13, gpio.OUT)
-    gpio.setup(3, gpio.OUT)
-    gpio.setup(5, gpio.OUT)
-    gpio.setup(8, gpio.OUT)
-    gpio.setup(10, gpio.OUT)
+    gpio.setup(35, gpio.OUT) #left side
+    gpio.setup(37, gpio.OUT) #left side
+    gpio.setup(36, gpio.OUT) #right side
+    gpio.setup(38, gpio.OUT) #right side
+    #gpio.setup(8, gpio.OUT)
+    #gpio.setup(10, gpio.OUT)
     #gpio.output(11, gpio.HIGH)
     #gpio.output(13, gpio.HIGH)
 
 def clear():
-    gpio.output(3, gpio.LOW)
-    gpio.output(5, gpio.LOW)
-    gpio.output(8, gpio.LOW)
-    gpio.output(10, gpio.LOW)
+    gpio.output(35, gpio.LOW)
+    gpio.output(37, gpio.LOW)
+    gpio.output(36, gpio.LOW)
+    gpio.output(38, gpio.LOW)
 
 def cleanup():
     global previousstate
@@ -36,31 +36,31 @@ def cleanup():
 
 def forward():
     clear()
-    gpio.output(3, gpio.HIGH)
-    gpio.output(5, gpio.LOW)
-    gpio.output(8, gpio.LOW)
-    gpio.output(10, gpio.HIGH)
+    gpio.output(35, gpio.HIGH)
+    gpio.output(37, gpio.LOW)
+    gpio.output(36, gpio.HIGH)
+    gpio.output(38, gpio.LOW)
 
 def backward():
     clear()
-    gpio.output(3, gpio.LOW)
-    gpio.output(5, gpio.HIGH)
-    gpio.output(8, gpio.HIGH)
-    gpio.output(10, gpio.LOW)
+    gpio.output(35, gpio.LOW)
+    gpio.output(37, gpio.HIGH)
+    gpio.output(36, gpio.LOW)
+    gpio.output(38, gpio.HIGH)
 
 def left():
     clear()
-    gpio.output(3, gpio.HIGH)
-    gpio.output(5, gpio.LOW)
-    gpio.output(8, gpio.HIGH)
-    gpio.output(10, gpio.LOW)
+    gpio.output(35, gpio.HIGH)
+    gpio.output(37, gpio.LOW)
+    gpio.output(36, gpio.LOW)
+    gpio.output(38, gpio.HIGH)
 
 def right():
     clear()
-    gpio.output(3, gpio.LOW)
-    gpio.output(5, gpio.HIGH)
-    gpio.output(8, gpio.LOW)
-    gpio.output(10, gpio.HIGH)
+    gpio.output(35, gpio.LOW)
+    gpio.output(37, gpio.HIGH)
+    gpio.output(36, gpio.HIGH)
+    gpio.output(38, gpio.LOW)
 
 class robotThread (threading.Thread):
   def __init__(self, threadID, name, counter):
