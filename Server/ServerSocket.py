@@ -154,7 +154,7 @@ class socketThread (threading.Thread):
     #socket.setdefaulttimeout(10)
     server = socket.socket()
 
-    server.bind(("192.168.50.201", 6678))
+    server.bind(("192.168.50.177", 6678))
 
     while True:
         try:

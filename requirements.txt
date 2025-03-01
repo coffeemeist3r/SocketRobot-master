@@ -1,5 +1,2 @@
-socket
-threading
-signal
-RPi
+RPi.GPIO
 pynput
