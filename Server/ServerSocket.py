@@ -12,14 +12,14 @@ exit_program = 0
 
 def initialize():
     gpio.setmode(gpio.BOARD)
-    gpio.setup(11, gpio.OUT)
-    gpio.setup(13, gpio.OUT)
+    #gpio.setup(11, gpio.OUT)
+    #gpio.setup(13, gpio.OUT)
     gpio.setup(3, gpio.OUT)
     gpio.setup(5, gpio.OUT)
     gpio.setup(8, gpio.OUT)
     gpio.setup(10, gpio.OUT)
-    gpio.output(11, gpio.HIGH)
-    gpio.output(13, gpio.HIGH)
+    #gpio.output(11, gpio.HIGH)
+    #gpio.output(13, gpio.HIGH)
 
 def clear():
     gpio.output(3, gpio.LOW)
@@ -31,8 +31,8 @@ def cleanup():
     global previousstate
     clear()
     previousstate = 0
-    gpio.output(11, gpio.LOW)
-    gpio.output(13, gpio.LOW)
+    #gpio.output(11, gpio.LOW)
+    #gpio.output(13, gpio.LOW)
 
 def forward():
     clear()
