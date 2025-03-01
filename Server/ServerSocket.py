@@ -1,7 +1,8 @@
 import socket
 import threading
 import signal
-import RPi.GPIO as gpio # type: ignore
+import gpiozero as gpio
+
 
 previousstate = 0 # 0 1 2 3 4 none forward backward left right
 forwardvar = 0
@@ -16,10 +17,7 @@ def initialize():
     gpio.setup(37, gpio.OUT) #left side
     gpio.setup(36, gpio.OUT) #right side
     gpio.setup(38, gpio.OUT) #right side
-    #gpio.setup(8, gpio.OUT)
-    #gpio.setup(10, gpio.OUT)
-    #gpio.output(11, gpio.HIGH)
-    #gpio.output(13, gpio.HIGH)
+
 
 def clear():
     gpio.output(35, gpio.LOW)
