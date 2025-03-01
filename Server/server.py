@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings('ignore', category=RuntimeWarning, module='gpiozero')
 import gpiozero as gpio
 from time import sleep
 import socket
