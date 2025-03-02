@@ -1,3 +1,4 @@
 RPi.GPIO
+lgpio
 gpiozero
 pynput

@@ -1,5 +1,17 @@
-import warnings
-warnings.filterwarnings('ignore', category=RuntimeWarning, module='gpiozero')
+#This BS is needed to fix an issue that hasnt been patched in gpiozero for Pi5.
+#Ugh.
+import gpiozero.pins.lgpio
+import lgpio
+
+def __patched_init(self, chip=None):
+    gpiozero.pins.lgpio.LGPIOFactory.__bases__[0].__init__(self)
+    chip = 0
+    self._handle = lgpio.gpiochip_open(chip)
+    self._chip = chip
+    self.pin_class = gpiozero.pins.lgpio.LGPIOPin
+
+gpiozero.pins.lgpio.LGPIOFactory.__init__ = __patched_init
+# End of BS.
 import gpiozero as gpio
 from time import sleep
 import socket
