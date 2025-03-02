@@ -17,19 +17,19 @@ from time import sleep
 import socket
 import threading
 
+previousstate = 0 # 0 1 2 3 4 none forward backward left right
+forwardvar = 0
+backwardvar = 0
+leftvar = 0
+rightvar = 0
+exit_program = 0
+
+#Definte motor pins using BCM format
+leftMotor = gpio.Motor(19,26) #GPIO 19 & 26 or Board Pins 35 & 37
+rightMotor = gpio.Motor(16, 20) #GPIO 16 & 20 or Board Pins 36 & 38
+robot = gpio.Robot(leftMotor, rightMotor)
+
 def main():
-    previousstate = 0 # 0 1 2 3 4 none forward backward left right
-    forwardvar = 0
-    backwardvar = 0
-    leftvar = 0
-    rightvar = 0
-    exit_program = 0
-
-    #Definte motor pins using BCM format
-    leftMotor = gpio.Motor(19,26) #GPIO 19 & 26 or Board Pins 35 & 37
-    rightMotor = gpio.Motor(16, 20) #GPIO 16 & 20 or Board Pins 36 & 38
-    robot = gpio.Robot(leftMotor, rightMotor)
-
 
     def clear():
         robot.stop()
