@@ -1,5 +1,6 @@
 #This BS is needed to fix an issue that hasnt been patched in gpiozero for Pi5.
 #Ugh.
+"""
 import gpiozero.pins.lgpio
 import lgpio
 
@@ -12,6 +13,7 @@ def __patched_init(self, chip=None):
 
 gpiozero.pins.lgpio.LGPIOFactory.__init__ = __patched_init
 # End of BS.
+"""
 import gpiozero as gpio
 from time import sleep
 import socket
