@@ -1,8 +1,7 @@
 import socket
 import threading
 import signal
-#import gpiozero as gpio
-import lgpio as gpio
+import RPi.GPIO as gpio # type: ignore
 
 
 previousstate = 0 # 0 1 2 3 4 none forward backward left right
