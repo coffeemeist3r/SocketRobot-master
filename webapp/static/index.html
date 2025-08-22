@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robot Controller</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 16px; display: grid; gap: 16px; }
+    header { display: flex; align-items: center; justify-content: space-between; }
+    .grid { display: grid; grid-template-columns: repeat(3, 120px); grid-auto-rows: 120px; gap: 12px; justify-content: center; }
+    button { font-size: 18px; border-radius: 10px; border: 1px solid #8884; cursor: pointer; }
+    button:active, .active { outline: 3px solid #4caf50; }
+    .row { display: flex; gap: 12px; justify-content: center; }
+    .pill { padding: 6px 10px; border-radius: 999px; border: 1px solid #8884; }
+    .status { display: flex; gap: 8px; align-items: center; }
+    .kbd { padding: 2px 6px; border-radius: 6px; border: 1px solid #8884; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Robot Controller</h1>
+    <div class="status">
+      <span id="conn" class="pill">Disconnected</span>
+      <span class="pill">WASD or tap buttons</span>
+    </div>
+  </header>
+
+  <section class="grid" aria-label="D-pad">
+    <div></div>
+    <button id="btn-w" data-key="w">Forward<br><span class="kbd">W</span></button>
+    <div></div>
+    <button id="btn-a" data-key="a">Left<br><span class="kbd">A</span></button>
+    <button id="btn-stop">Stop</button>
+    <button id="btn-d" data-key="d">Right<br><span class="kbd">D</span></button>
+    <div></div>
+    <button id="btn-s" data-key="s">Backward<br><span class="kbd">S</span></button>
+    <div></div>
+  </section>
+
+  <script>
+    const connEl = document.getElementById('conn');
+    const btnStop = document.getElementById('btn-stop');
+    const keyButtons = Array.from(document.querySelectorAll('button[data-key]'));
+    let ws;
+
+    function connect() {
+      const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+      ws = new WebSocket(`${proto}://${location.host}/ws/control`);
+      ws.onopen = () => { connEl.textContent = 'Connected'; };
+      ws.onclose = () => { connEl.textContent = 'Disconnected'; setTimeout(connect, 1000); };
+      ws.onerror = () => { connEl.textContent = 'Error'; };
+      ws.onmessage = (evt) => {
+        try {
+          const msg = JSON.parse(evt.data);
+          if (msg.type === 'state') {
+            reflectState(msg.state);
+          }
+        } catch {}
+      }
+    }
+
+    function sendKey(key, action) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'key', key, action }));
+      }
+    }
+
+    function sendCommand(cmd) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'command', cmd }));
+      }
+    }
+
+    function reflectState(state) {
+      keyButtons.forEach(btn => {
+        const key = btn.dataset.key;
+        const active = (key === 'w' && state.forward) || (key === 's' && state.backward) || (key === 'a' && state.left) || (key === 'd' && state.right);
+        btn.classList.toggle('active', !!active);
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if (['w','a','s','d'].includes(k)) {
+        e.preventDefault();
+        sendKey(k, 'down');
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      const k = e.key.toLowerCase();
+      if (['w','a','s','d'].includes(k)) {
+        e.preventDefault();
+        sendKey(k, 'up');
+      }
+    });
+
+    keyButtons.forEach(btn => {
+      const key = btn.dataset.key;
+      // Mouse / touch press-release
+      const down = () => sendKey(key, 'down');
+      const up = () => sendKey(key, 'up');
+      btn.addEventListener('mousedown', down);
+      btn.addEventListener('mouseup', up);
+      btn.addEventListener('mouseleave', up);
+      btn.addEventListener('touchstart', (e) => { e.preventDefault(); down(); }, { passive: false });
+      btn.addEventListener('touchend', (e) => { e.preventDefault(); up(); });
+      btn.addEventListener('touchcancel', (e) => { e.preventDefault(); up(); });
+    });
+
+    btnStop.addEventListener('click', () => sendCommand('stop'));
+
+    connect();
+  </script>
+</body>
+</html>
+
+

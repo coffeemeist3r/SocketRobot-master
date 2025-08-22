@@ -1,4 +1,11 @@
-RPi.GPIO
-lgpio
+# Raspberry Pi GPIO libs (installed only on Linux)
+RPi.GPIO; platform_system == "Linux"
+lgpio; platform_system == "Linux"
 gpiozero
+
+# Client dev utility (legacy client)
 pynput
+
+# Web backend
+fastapi
+uvicorn[standard]
